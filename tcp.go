@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/hex"
 	"fmt"
 	"io"
 	"log"
@@ -8,7 +9,7 @@ import (
 	"os"
 )
 
-func listenTcp(port int, e bool) {
+func listenTcp(port int, e, x bool) {
 	fmt.Println("listening on port:", port)
 
 	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
@@ -28,7 +29,19 @@ func listenTcp(port int, e bool) {
 			go execCommand(conn)
 		} else {
 			go func(c net.Conn) {
-				io.Copy(os.Stdout, c)
+				if x {
+					buf := make([]byte, 4096)
+
+					n, err := conn.Read(buf)
+					if err != nil {
+						log.Println("Error reading from connection:", err)
+						return
+					}
+
+					log.Println(hex.Dump(buf[:n]))
+				} else {
+					io.Copy(os.Stdout, c)
+				}
 
 				c.Close()
 			}(conn)

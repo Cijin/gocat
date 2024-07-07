@@ -14,11 +14,13 @@ var (
 	port   int
 	z      string
 	e      bool
+	x      bool
 )
 
 func init() {
 	flag.BoolVar(&isUdp, "u", false, "Use UDP")
 	flag.BoolVar(&listen, "l", true, "Listen")
+	flag.BoolVar(&x, "x", false, "Hex dump")
 	flag.BoolVar(&e, "e", false, "Turn a process into a server")
 	flag.IntVar(&port, "p", 8080, "Port to listen on")
 	flag.StringVar(&z, "z", "", "Connect to port without sending data")
@@ -52,5 +54,5 @@ func main() {
 		return
 	}
 
-	listenTcp(port, e)
+	listenTcp(port, e, x)
 }
